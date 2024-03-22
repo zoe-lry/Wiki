@@ -1,8 +1,9 @@
 package com.zoe.wiki.controller;
 
 
-import com.zoe.wiki.domain.Ebook;
+import com.zoe.wiki.req.EbookReq;
 import com.zoe.wiki.resp.CommonResp;
+import com.zoe.wiki.resp.EbookResp;
 import com.zoe.wiki.service.EbookService;
 import java.util.List;
 import javax.annotation.Resource;
@@ -18,9 +19,9 @@ public class EbookController {
   private EbookService ebookService;
 
   @GetMapping("/list")
-  public CommonResp list() {
-    CommonResp<List<Ebook>> resp = new CommonResp<>();
-    List<Ebook> list = ebookService.list();
+  public CommonResp list(EbookReq req) {
+    CommonResp<List<EbookResp>> resp = new CommonResp<>();
+    List<EbookResp> list = ebookService.list(req);
     resp.setContent(list);
     return resp;
   }
