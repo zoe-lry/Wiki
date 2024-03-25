@@ -9,6 +9,7 @@ import com.zoe.wiki.util.CopyUtil;
 import java.util.List;
 import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
 @Service  //识别是Service
 public class EbookService {
@@ -18,7 +19,9 @@ public class EbookService {
   public List<EbookResp> list(EbookReq req) {
     EbookExample ebookExample = new EbookExample();
     EbookExample.Criteria criteria = ebookExample.createCriteria();
-    criteria.andNameLike("%" + req.getName() + "%");
+    if (!ObjectUtils.isEmpty(req.getName())) {
+      criteria.andNameLike("%" + req.getName() + "%");
+    }
     List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
 //    List<EbookResp> respList = new ArrayList<>();
