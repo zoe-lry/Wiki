@@ -7,6 +7,7 @@ import com.zoe.wiki.domain.EbookExample;
 import com.zoe.wiki.mapper.EbookMapper;
 import com.zoe.wiki.req.EbookReq;
 import com.zoe.wiki.resp.EbookResp;
+import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.util.CopyUtil;
 import java.util.List;
 import javax.annotation.Resource;
@@ -22,13 +23,13 @@ public class EbookService {
   @Resource  //把ebookMapper注入进来
   private EbookMapper ebookMapper;
 
-  public List<EbookResp> list(EbookReq req) {
+  public PageResp<EbookResp> list(EbookReq req) {
     EbookExample ebookExample = new EbookExample();
     EbookExample.Criteria criteria = ebookExample.createCriteria();
     if (!ObjectUtils.isEmpty(req.getName())) {
       criteria.andNameLike("%" + req.getName() + "%");
     }
-    PageHelper.startPage(1,3);
+    PageHelper.startPage(req.getPage(),req.getSize());
     List<Ebook> ebooksList = ebookMapper.selectByExample(ebookExample);
 
     PageInfo<Ebook> pageInfo = new PageInfo<>(ebooksList);
@@ -48,8 +49,13 @@ public class EbookService {
 //    }
 
 //    列表复制
-    List<EbookResp> respList = CopyUtil.copyList(ebooksList, EbookResp.class);
-    return respList;
+    List<EbookResp> list = CopyUtil.copyList(ebooksList, EbookResp.class);
+
+    PageResp<EbookResp> pageResp = new PageResp<>();
+    pageResp.setTotal(pageInfo.getTotal());
+    pageResp.setList(list);
+
+    return pageResp;
   }
 
 }
