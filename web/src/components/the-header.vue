@@ -12,6 +12,9 @@
       <a-menu-item key="/admin/ebook">
         <router-link to="/admin/ebook">Ebooks</router-link>
       </a-menu-item>
+      <a-menu-item key="/admin/Category">
+        <router-link to="/admin/Category">Category</router-link>
+      </a-menu-item>
       <a-menu-item key="/about">
         <router-link to="/about">About us</router-link>
       </a-menu-item>
