@@ -8,6 +8,7 @@ import com.zoe.wiki.resp.EbookQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.service.EbookService;
 import javax.annotation.Resource;
+import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,7 +25,7 @@ public class EbookController {
   private EbookService ebookService;
 
   @GetMapping("/list")
-  public CommonResp list(EbookQueryReq req) {
+  public CommonResp list(@Valid EbookQueryReq req) {
     CommonResp<PageResp<EbookQueryResp>> resp = new CommonResp<>();
     PageResp<EbookQueryResp> list = ebookService.list(req);
     resp.setContent(list);
