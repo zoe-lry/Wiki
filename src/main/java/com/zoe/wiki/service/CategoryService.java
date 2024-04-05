@@ -27,8 +27,20 @@ public class CategoryService {
   @Resource  //把SnowFlake注入进来
   private SnowFlake snowFlake;
 
+  public List<CategoryQueryResp> all() {
+    CategoryExample categoryExample = new CategoryExample();
+    categoryExample.setOrderByClause("sort asc");
+    List<Category> categorysList = categoryMapper.selectByExample(categoryExample);
+
+//    列表复制
+    List<CategoryQueryResp> list = CopyUtil.copyList(categorysList, CategoryQueryResp.class);
+
+    return list;
+  }
+
   public PageResp<CategoryQueryResp> list(CategoryQueryReq req) {
     CategoryExample categoryExample = new CategoryExample();
+    categoryExample.setOrderByClause("sort asc");
     CategoryExample.Criteria criteria = categoryExample.createCriteria();
     PageHelper.startPage(req.getPage(),req.getSize());
     List<Category> categorysList = categoryMapper.selectByExample(categoryExample);
@@ -58,6 +70,7 @@ public class CategoryService {
 
     return pageResp;
   }
+
 
   /**
    * 保存

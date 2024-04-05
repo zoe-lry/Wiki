@@ -7,6 +7,7 @@ import com.zoe.wiki.resp.CommonResp;
 import com.zoe.wiki.resp.CategoryQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.service.CategoryService;
+import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -24,6 +25,13 @@ public class CategoryController {
   @Resource
   private CategoryService categoryService;
 
+  @GetMapping("/all")
+  public CommonResp all() {
+    CommonResp<List<CategoryQueryResp>> resp = new CommonResp<>();
+    List<CategoryQueryResp> list = categoryService.all();
+    resp.setContent(list);
+    return resp;
+  }
   @GetMapping("/list")
   public CommonResp list(@Valid CategoryQueryReq req) {
     CommonResp<PageResp<CategoryQueryResp>> resp = new CommonResp<>();
