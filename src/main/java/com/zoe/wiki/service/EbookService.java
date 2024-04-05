@@ -10,6 +10,7 @@ import com.zoe.wiki.req.EbookSaveReq;
 import com.zoe.wiki.resp.EbookQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.util.CopyUtil;
+import com.zoe.wiki.util.SnowFlake;
 import java.util.List;
 import javax.annotation.Resource;
 import org.slf4j.Logger;
@@ -23,6 +24,8 @@ public class EbookService {
 
   @Resource  //把ebookMapper注入进来
   private EbookMapper ebookMapper;
+  @Resource  //把SnowFlake注入进来
+  private SnowFlake snowFlake;
 
   public PageResp<EbookQueryResp> list(EbookQueryReq req) {
     EbookExample ebookExample = new EbookExample();
@@ -66,12 +69,13 @@ public class EbookService {
     Ebook ebook = CopyUtil.copy(req, Ebook.class);
     if (ObjectUtils.isEmpty(req.getId())) {
       //新增
+      ebook.setId(snowFlake.nextId());
       ebookMapper.insert(ebook);
     } else {
       //更新
       ebookMapper.updateByPrimaryKey(ebook);
     }
-
   }
+
 
 }
