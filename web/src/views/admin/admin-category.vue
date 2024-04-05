@@ -64,6 +64,19 @@
       </a-form-item>
       <a-form-item label="父分类">
         <a-input v-model:value="category.parent" />
+        <a-select
+            ref="select"
+            v-model:value="category.parent"
+            @focus="focus"
+        >
+          <a-select-option v-for = "c in level1" :key = "c.id" :value="c.id" :disabled="category.id ===c.id">
+            {{ c.name }}
+          </a-select-option>
+          <a-select-option value="0">
+            None
+          </a-select-option>
+        </a-select>
+
       </a-form-item>
     </a-form>
 
