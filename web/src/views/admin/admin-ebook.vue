@@ -32,6 +32,9 @@
           <template #cover="{ text: cover }">
             <img v-if="cover" :src="cover" alt="avatar" />
           </template>
+          <template v-slot:category ="{ text, record }">
+            <span>{{ getCategoryName(record.category1Id)}} /{{ getCategoryName(record.category2Id)}} </span>
+          </template>
           <template v-slot:action="{ text, record }">
             <a-space size="small">
               <a-button type="primary" @click="edit(record)">
@@ -108,22 +111,17 @@ export default defineComponent({
 
     const columns = [
       {
-        title: '封面',
+        title: 'Cover',
         dataIndex: 'cover',
         slots: { customRender: 'cover' }
       },
       {
-        title: '名称',
+        title: 'Name',
         dataIndex: 'name'
       },
       {
-        title: '分类一',
-        key: 'category1Id',
-        dataIndex: 'category1Id'
-      },
-      {
-        title: '分类二',
-        dataIndex: 'category2Id'
+        title: 'Category',
+        slots: {customRender: 'category'}
       },
       {
         title: '文档数',
@@ -244,9 +242,9 @@ export default defineComponent({
 
 
     const level1 = ref(); // 一级分类树，children属性就是二级分类
-
+    let categorys: any;
     /**
-     * 数据查询
+     * 查询所有分类
      **/
     const handleQueryCategory = () => {
       loading.value = true;
@@ -254,7 +252,7 @@ export default defineComponent({
         loading.value = false;
         const data = response.data;
         if (data.success) {
-          const categorys = data.content;
+          categorys = data.content;
           console.log("原始数组：", categorys);
 
           level1.value = [];
@@ -264,6 +262,15 @@ export default defineComponent({
           message.error(data.message);
         }
       });
+    };
+    const getCategoryName = (cid : number) => {
+      let result = "";
+      categorys.forEach((item : any) => {
+        if (item.id === cid) {
+          result = item.name;
+        }
+      });
+      return result;
     };
 
     onMounted(() => {
@@ -282,6 +289,7 @@ export default defineComponent({
       loading,
       handleTableChange,
       handleQuery,
+      getCategoryName,
 
       edit,
       add,
