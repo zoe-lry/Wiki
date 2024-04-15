@@ -7,6 +7,7 @@ import com.zoe.wiki.resp.CommonResp;
 import com.zoe.wiki.resp.DocQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.service.DocService;
+import java.util.Arrays;
 import java.util.List;
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -47,10 +48,11 @@ public class DocController {
     return resp;
   }
 
-  @DeleteMapping("/delete/{id}")
-  public CommonResp delete(@PathVariable Long id) {
+  @DeleteMapping("/delete/{idsStr}")
+  public CommonResp delete(@PathVariable String idsStr) {
     CommonResp resp = new CommonResp<>();
-    docService.delete(id);
+    List<String> list = Arrays.asList(idsStr.split(","));
+    docService.delete(list);
     return resp;
   }
 }
