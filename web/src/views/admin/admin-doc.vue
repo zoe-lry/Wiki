@@ -210,7 +210,7 @@ export default defineComponent({
     /**
      * 遍历数组，找到所有需要删除的id
      */
-    const ids: Array<String> = [];
+    const ids: Array<string> = [];
     const getDeleteId = (treeSelectData: any, id: any) => {
       // console.log(treeSelectData, id);
       // 遍历数组，即遍历某一层节点
