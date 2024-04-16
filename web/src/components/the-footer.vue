@@ -1,6 +1,6 @@
 <template>
-  <a-layout-footer style="text-align: center">
-    Zoe's Blog
+  <a-layout-footer style="text-align: center;height: 100px;width: 100%;position: absolute;bottom: 0;left: 0">
+    Zoe's
   </a-layout-footer>
 </template>
 
