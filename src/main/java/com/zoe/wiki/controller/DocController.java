@@ -33,6 +33,7 @@ public class DocController {
     resp.setContent(list);
     return resp;
   }
+
   @GetMapping("/list")
   public CommonResp list(@Valid DocQueryReq req) {
     CommonResp<PageResp<DocQueryResp>> resp = new CommonResp<>();

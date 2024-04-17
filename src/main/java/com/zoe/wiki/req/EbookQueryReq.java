@@ -1,10 +1,11 @@
 package com.zoe.wiki.req;
 
-public class EbookQueryReq extends PageReq{
+public class EbookQueryReq extends PageReq {
     private Long id;
-    private Long categoryId2;
 
     private String name;
+
+    private Long categoryId2;
 
     public Long getId() {
         return id;
@@ -34,8 +35,8 @@ public class EbookQueryReq extends PageReq{
     public String toString() {
         return "EbookQueryReq{" +
             "id=" + id +
-            ", categoryId2=" + categoryId2 +
             ", name='" + name + '\'' +
+            ", categoryId2=" + categoryId2 +
             "} " + super.toString();
     }
 }

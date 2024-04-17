@@ -19,17 +19,15 @@ insert into `ebook` (id, name, description) values (3, 'Python 入门教程', '�
 insert into `ebook` (id, name, description) values (4, 'Mysql 入门教程', '零基础入门 Mysql 开发，企业级应用开发最佳首选框架');
 insert into `ebook` (id, name, description) values (5, 'Oracle 入门教程', '零基础入门 Oracle 开发，企业级应用开发最佳首选框架');
 
-
 drop table if exists `test`;
 create table `test` (
-  `id` bigint not null comment 'id',
-  `name` varchar(50) comment '名称',
-  `password` varchar(50) comment '密码',
-  primary key (`id`)
+                        `id` bigint not null comment 'id',
+                        `name` varchar(50) comment '名称',
+                        `password` varchar(50) comment '密码',
+                        primary key (`id`)
 ) engine=innodb default charset=utf8mb4 comment='测试';
 
 insert into `test` (id, name, password) values (1, '测试', 'password');
-
 
 # 分类
 drop table if exists `category`;
@@ -76,7 +74,6 @@ insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) val
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (4, 1, 3, '文档2.1', 1, 0, 0);
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (5, 1, 3, '文档2.2', 2, 0, 0);
 insert into `doc` (id, ebook_id, parent, name, sort, view_count, vote_count) values (6, 1, 5, '文档2.2.1', 1, 0, 0);
-
 
 -- 文档内容
 drop table if exists `content`;
