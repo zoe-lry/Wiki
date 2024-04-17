@@ -3,49 +3,88 @@
       <a-layout-content
           :style="{ background: '#fff', padding: '24px', margin: 0, minHeight: '280px' }"
       >
-        <p>
-          <a-form layout="inline" :model="param">
-            <a-form-item>
-              <a-button type="primary" @click="handleQuery()">
-                Search
-              </a-button>
-            </a-form-item>
-            <a-form-item>
-              <a-button type="primary" @click="add()">
-                Add
-              </a-button>
-            </a-form-item>
-          </a-form>
-        </p>
-        <a-table
-            :columns="columns"
-            :row-key="record => record.id"
-            :data-source="level1"
-            :loading="loading"
-            :pagination="false"
-        >
-          <template #cover="{ text: cover }">
-            <img v-if="cover" :src="cover" alt="avatar" />
-          </template>
-          <template v-slot:action="{ text, record }">
-            <a-space size="small">
-              <a-button type="primary" @click="edit(record)">
-                Edit
-              </a-button>
+        <a-row :gutter = "24">
+          <a-col :span="8">
+            <p>
+              <a-form layout="inline" :model="param">
+                <a-form-item>
+                  <a-button type="primary" @click="handleQuery()">
+                    Search
+                  </a-button>
+                </a-form-item>
+                <a-form-item>
+                  <a-button type="primary" @click="add()">
+                    Add
+                  </a-button>
+                </a-form-item>
+              </a-form>
+            </p>
+            <a-table
+                :columns="columns"
+                :row-key="record => record.id"
+                :data-source="level1"
+                :loading="loading"
+                :pagination="false"
+                size = "small"
+            >
+              <template #name="{ text, record }">
+                {{record.sort}} {{text}}
+              </template>
+              <template v-slot:action="{ text, record }">
+                <a-space size="small">
+                  <a-button type="primary" @click="edit(record)" size = "small">
+                    Edit
+                  </a-button>
 
-              <a-popconfirm
-                  title="Are you sure delete this task?"
-                  ok-text="Yes"
-                  cancel-text="No"
-                  @confirm= "handleDelete(record.id)"
-              >
-                <a-button type="danger" >
-                  Delete
-                </a-button>
-              </a-popconfirm>
-            </a-space>
-          </template>
-        </a-table>
+                  <a-popconfirm
+                      title="Are you sure delete this task?"
+                      ok-text="Yes"
+                      cancel-text="No"
+                      @confirm= "handleDelete(record.id)"
+                  >
+                    <a-button type="danger" size = "small">
+                      Delete
+                    </a-button>
+                  </a-popconfirm>
+                </a-space>
+              </template>
+            </a-table>
+          </a-col>
+          <a-col :span="16">
+            <p>
+              <a-form layout="inline" :model="param">
+                <a-form-item>
+                  <a-button type="primary" @click="handleSave()">
+                    保存
+                  </a-button>
+                </a-form-item>
+              </a-form>
+            </p>
+            <a-form :model="doc" layout = "vertical">
+              <a-form-item>
+                <a-input v-model:value="doc.name" placeholder="名称"/>
+              </a-form-item>
+              <a-form-item>
+                <a-tree-select
+                    v-model:value="doc.parent"
+                    style="width: 100%"
+                    :dropdown-style="{ maxHeight: '400px', overflow: 'auto' }"
+                    :tree-data="treeSelectData"
+                    placeholder="请选择父文档"
+                    tree-default-expand-all
+                    :replaceFields="{title: 'name', key: 'id', value: 'id'}"
+                >
+                </a-tree-select>
+              </a-form-item>
+              <a-form-item>
+                <a-input v-model:value="doc.sort" placeholder="顺序"/>
+              </a-form-item>
+              <a-form-item>
+                <div id="content"></div>
+              </a-form-item>
+            </a-form>
+          </a-col>
+        </a-row>
       </a-layout-content>
     </a-layout>
 <!--  <a-modal-->
@@ -56,8 +95,6 @@
 <!--  >-->
 <!--  </a-modal>-->
 </template>
-<script setup lang="ts">
-</script>
 
 <script lang="ts">
 import {createVNode, defineComponent, onMounted, ref} from 'vue';
@@ -82,15 +119,6 @@ export default defineComponent({
       {
         title: '名称',
         dataIndex: 'name'
-      },
-      {
-        title: '父文档',
-        key: 'parent',
-        dataIndex: 'parent'
-      },
-      {
-        title: '顺序',
-        dataIndex: 'sort'
       },
       {
         title: 'Action',
@@ -144,8 +172,9 @@ export default defineComponent({
     const modalVisible = ref(false);
     const modalLoading = ref(false);
     const editor = new E('#content');
+    editor.config.zIndex = 0;
 
-    const handleModalOk = () => {
+    const handleSave = () => {
       modalLoading.value = true;
       axios.post("/doc/save", doc.value).then((response) => {
         modalLoading.value = false;
@@ -240,9 +269,6 @@ export default defineComponent({
 
       // 为选择树添加一个"无"
       treeSelectData.value.unshift({id: 0, name: '无'});
-      setTimeout(function () {
-        editor.create();
-      }, 100);
     };
 
     /**
@@ -258,9 +284,6 @@ export default defineComponent({
 
       // 为选择树添加一个"无"
       treeSelectData.value.unshift({id: 0, name: '无'});
-      setTimeout(function () {
-        editor.create();
-      }, 100);
     };
     /**
      * 删除
@@ -288,6 +311,7 @@ export default defineComponent({
     };
     onMounted(() => {
       handleQuery();
+      editor.create();
     });
 
     return {
@@ -304,7 +328,7 @@ export default defineComponent({
       doc,
       modalVisible,
       modalLoading,
-      handleModalOk,
+      handleSave,
 
       handleDelete,
 
