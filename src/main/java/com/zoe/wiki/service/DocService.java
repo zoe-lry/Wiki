@@ -1,5 +1,7 @@
 package com.zoe.wiki.service;
 
+import static org.springframework.util.ObjectUtils.isEmpty;
+
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zoe.wiki.domain.Content;
@@ -18,7 +20,6 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
 
 @Service  //识别是Service
 public class DocService {
@@ -82,7 +83,7 @@ public class DocService {
   public void save(DocSaveReq req) {
     Doc doc = CopyUtil.copy(req, Doc.class);
     Content content = CopyUtil.copy(req, Content.class);
-    if (ObjectUtils.isEmpty(req.getId())) {
+    if (isEmpty(req.getId())) {
       // 新增
       doc.setId(snowFlake.nextId());
       docMapper.insert(doc);
@@ -115,6 +116,11 @@ public class DocService {
 
   public String findContent(Long id) {
     Content content = contentMapper.selectByPrimaryKey(id);
-    return content.getContent();
+    System.out.println(content);
+    if (isEmpty(content)) {
+      return "";
+    } else {
+      return content.getContent();
+    }
   }
 }
