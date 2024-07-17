@@ -8,6 +8,7 @@ import com.zoe.wiki.exception.BusinessException;
 import com.zoe.wiki.exception.BusinessExceptionCode;
 import com.zoe.wiki.mapper.UserMapper;
 import com.zoe.wiki.req.UserQueryReq;
+import com.zoe.wiki.req.UserResetPasswordReq;
 import com.zoe.wiki.req.UserSaveReq;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.resp.UserQueryResp;
@@ -88,6 +89,14 @@ public class UserService {
       user.setPassword(null); // 不允许修改password
       userMapper.updateByPrimaryKeySelective(user);
     }
+  }
+
+  /**
+   * 重置密码
+   */
+  public void resetPassword(UserResetPasswordReq req) {
+    User user = CopyUtil.copy(req, User.class);
+    userMapper.updateByPrimaryKeySelective(user);
   }
 
   public User selectByLoginName(String loginName) {

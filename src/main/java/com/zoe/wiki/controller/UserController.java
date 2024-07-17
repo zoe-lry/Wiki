@@ -2,6 +2,7 @@ package com.zoe.wiki.controller;
 
 
 import com.zoe.wiki.req.UserQueryReq;
+import com.zoe.wiki.req.UserResetPasswordReq;
 import com.zoe.wiki.req.UserSaveReq;
 import com.zoe.wiki.resp.CommonResp;
 import com.zoe.wiki.resp.UserQueryResp;
@@ -46,6 +47,15 @@ public class UserController {
   public CommonResp delete(@PathVariable Long id) {
     CommonResp resp = new CommonResp<>();
     userService.delete(id);
+    return resp;
+  }
+
+  @PostMapping("/reset-password")
+  public CommonResp resetPassword(@Valid @RequestBody UserResetPasswordReq req) {
+    // 给密码加密
+    req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+    CommonResp<Object> resp = new CommonResp<>();
+    userService.resetPassword(req);
     return resp;
   }
 }
