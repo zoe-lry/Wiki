@@ -85,6 +85,7 @@ public class UserService {
     } else {
       // 更新
       user.setLoginName(null); // 不允许修改login name
+      user.setPassword(null); // 不允许修改password
       userMapper.updateByPrimaryKeySelective(user);
     }
   }
