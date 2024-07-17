@@ -9,6 +9,7 @@ import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.service.UserService;
 import javax.annotation.Resource;
 import javax.validation.Valid;
+import org.springframework.util.DigestUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,6 +35,8 @@ public class UserController {
 
   @PostMapping("/save")
   public CommonResp save(@Valid @RequestBody UserSaveReq req) {
+    // 给密码加密
+    req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
     CommonResp resp = new CommonResp<>();
     userService.save(req);
     return resp;
