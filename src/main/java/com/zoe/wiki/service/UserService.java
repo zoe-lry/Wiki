@@ -4,11 +4,13 @@ import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.zoe.wiki.domain.User;
 import com.zoe.wiki.domain.UserExample;
+import com.zoe.wiki.exception.BusinessException;
+import com.zoe.wiki.exception.BusinessExceptionCode;
 import com.zoe.wiki.mapper.UserMapper;
 import com.zoe.wiki.req.UserQueryReq;
 import com.zoe.wiki.req.UserSaveReq;
-import com.zoe.wiki.resp.UserQueryResp;
 import com.zoe.wiki.resp.PageResp;
+import com.zoe.wiki.resp.UserQueryResp;
 import com.zoe.wiki.util.CopyUtil;
 import com.zoe.wiki.util.SnowFlake;
 import java.util.List;
@@ -16,6 +18,7 @@ import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 
 @Service
@@ -67,13 +70,33 @@ public class UserService {
    */
   public void save(UserSaveReq req) {
     User user = CopyUtil.copy(req, User.class);
+
     if (ObjectUtils.isEmpty(req.getId())) {
-      // 新增
-      user.setId(snowFlake.nextId());
-      userMapper.insert(user);
+      if (ObjectUtils.isEmpty(selectByLoginName(user.getLoginName()))) {
+        // 新增
+        user.setId(snowFlake.nextId());
+        userMapper.insert(user);
+      } else {
+        // 用户名已存在，抛出异常
+        throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+
+      }
+
     } else {
       // 更新
       userMapper.updateByPrimaryKey(user);
+    }
+  }
+
+  public User selectByLoginName(String loginName) {
+    UserExample userExample = new UserExample();
+    UserExample.Criteria criteria = userExample.createCriteria();
+    criteria.andLoginNameEqualTo(loginName);
+    List<User> userList = userMapper.selectByExample(userExample);
+    if (CollectionUtils.isEmpty(userList)) {
+      return null;
+    } else {
+      return userList.get(0);
     }
   }
 
