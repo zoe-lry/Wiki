@@ -2,7 +2,10 @@
   <a-layout-header class="header">
     <div class="logo"/>
     <!--    登录    -->
-    <a class="login-menu" @click="showLoginModal">
+    <a class="login-menu" v-show="user.id" >
+      <span>Hello, {{user.name}}</span>
+    </a>
+    <a class="login-menu" @click="showLoginModal" v-show="!user.id">
       <span>Log In</span>
     </a>
 
@@ -60,9 +63,13 @@ declare let KEY: any;
 export default defineComponent({
   name: 'the-header',
   setup () {
+
+    let user = ref();
+    user.value = {};
+
     const loginUser = ref({
-      loginName: "test",
-      password: "test"
+      loginName: "test1",
+      password: "test123"
     });
     const loginModalVisible = ref(false);
     const loginModalLoading = ref(false);
@@ -81,6 +88,7 @@ export default defineComponent({
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
+          user.value = data.content;
         } else {
           message.error(data.message);
         }
@@ -92,7 +100,9 @@ export default defineComponent({
       loginModalLoading,
       showLoginModal,
       loginUser,
-      login
+      login,
+      user,
+
     }
   }
 });
