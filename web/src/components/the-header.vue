@@ -95,7 +95,7 @@ export default defineComponent({
       console.log("开始登录");
       loginModalLoading.value = true;
       loginUser.value.password = hexMd5(loginUser.value.password + KEY);
-      axios.post('/user/login/', loginUser.value).then((response) => {
+      axios.post('/user/login', loginUser.value).then((response) => {
         loginModalLoading.value = false;
         const data = response.data;
         if (data.success) {
