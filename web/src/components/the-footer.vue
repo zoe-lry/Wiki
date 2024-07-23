@@ -1,6 +1,6 @@
 <template>
   <a-layout-footer style="text-align: center;height: 100px;width: 100%;position: absolute;bottom: 0;left: 0">
-    Zoe's. Welcome {{user.name}}
+    Zoe's <span v-show="user.id">. Welcome {{user.name}} </span>
   </a-layout-footer>
 </template>
 
