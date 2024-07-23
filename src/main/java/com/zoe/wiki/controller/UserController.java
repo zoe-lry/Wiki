@@ -1,10 +1,12 @@
 package com.zoe.wiki.controller;
 
 
+import com.zoe.wiki.req.UserLoginReq;
 import com.zoe.wiki.req.UserQueryReq;
 import com.zoe.wiki.req.UserResetPasswordReq;
 import com.zoe.wiki.req.UserSaveReq;
 import com.zoe.wiki.resp.CommonResp;
+import com.zoe.wiki.resp.UserLoginResp;
 import com.zoe.wiki.resp.UserQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.service.UserService;
@@ -56,6 +58,16 @@ public class UserController {
     req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
     CommonResp<Object> resp = new CommonResp<>();
     userService.resetPassword(req);
+    return resp;
+  }
+  // 登录
+  @PostMapping("/login")
+  public CommonResp login(@Valid @RequestBody UserLoginReq req) {
+    // 给密码加密
+    req.setPassword(DigestUtils.md5DigestAsHex(req.getPassword().getBytes()));
+    CommonResp<UserLoginResp> resp = new CommonResp<>();
+    UserLoginResp userLoginResp = userService.login(req);
+    resp.setContent(userLoginResp);
     return resp;
   }
 }

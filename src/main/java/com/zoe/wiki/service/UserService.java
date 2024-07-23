@@ -7,10 +7,12 @@ import com.zoe.wiki.domain.UserExample;
 import com.zoe.wiki.exception.BusinessException;
 import com.zoe.wiki.exception.BusinessExceptionCode;
 import com.zoe.wiki.mapper.UserMapper;
+import com.zoe.wiki.req.UserLoginReq;
 import com.zoe.wiki.req.UserQueryReq;
 import com.zoe.wiki.req.UserResetPasswordReq;
 import com.zoe.wiki.req.UserSaveReq;
 import com.zoe.wiki.resp.PageResp;
+import com.zoe.wiki.resp.UserLoginResp;
 import com.zoe.wiki.resp.UserQueryResp;
 import com.zoe.wiki.util.CopyUtil;
 import com.zoe.wiki.util.SnowFlake;
@@ -114,4 +116,25 @@ public class UserService {
   public void delete(Long id) {
     userMapper.deleteByPrimaryKey(id);
   }
+  // 登录
+  public UserLoginResp login(UserLoginReq req) {
+    User userDb = selectByLoginName(req.getLoginName());
+    if (ObjectUtils.isEmpty(userDb)) {
+      // 用户不存在
+      LOG.info("用户名不存在, {}", req.getLoginName());
+      throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+    } else {
+      if (req.getPassword().equals(userDb.getPassword())){
+        // 登录成功
+//        UserLoginResp userLoginResp = CopyUtil.copy(userDb, UserLoginResp.class);
+//        return userLoginResp;
+        return CopyUtil.copy(userDb, UserLoginResp.class);
+      } else {
+        //  密码错误
+        LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", req.getPassword(), userDb.getPassword());
+        throw new BusinessException(BusinessExceptionCode.LOGIN_USER_ERROR);
+      }
+    }
+  }
+
 }
