@@ -30,6 +30,9 @@
       <a-menu-item key="/home">
         <router-link to="/">Home Page</router-link>
       </a-menu-item>
+      <a-menu-item key="/about">
+        <router-link to="/about">About us</router-link>
+      </a-menu-item>
       <a-menu-item key="/admin/user" :style="user.id? {}:{display:'none'}">
         <router-link to="/admin/User">Users</router-link>
       </a-menu-item>
@@ -39,9 +42,7 @@
       <a-menu-item key="/admin/Category" :style="user.id? {}:{display:'none'}">
         <router-link to="/admin/Category">Category</router-link>
       </a-menu-item>
-      <a-menu-item key="/about">
-        <router-link to="/about">About us</router-link>
-      </a-menu-item>
+
 
     </a-menu>
 
