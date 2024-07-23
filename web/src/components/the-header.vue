@@ -1,6 +1,18 @@
 <template>
   <a-layout-header class="header">
     <div class="logo"/>
+    <!--    退出登录    -->
+
+    <a-popconfirm
+        title="Are you sure to log out?"
+        ok-text="Yes"
+        cancel-text="No"
+        @confirm="logout()"
+    >
+      <a class="login-menu"  v-show="user.id">
+        <span>Log Out</span>
+      </a>
+    </a-popconfirm>
     <!--    登录    -->
     <a class="login-menu" v-show="user.id" >
       <span>Hello, {{user.name}}</span>
@@ -83,13 +95,28 @@ export default defineComponent({
       console.log("开始登录");
       loginModalLoading.value = true;
       loginUser.value.password = hexMd5(loginUser.value.password + KEY);
-      axios.post('/user/login', loginUser.value).then((response) => {
+      axios.post('/user/login/', loginUser.value).then((response) => {
         loginModalLoading.value = false;
         const data = response.data;
         if (data.success) {
           loginModalVisible.value = false;
           message.success("登录成功！");
           store.commit("setUser", data.content);
+        } else {
+          message.error(data.message);
+        }
+      });
+    }
+
+    // 退出登录
+    const logout = () => {
+      console.log("开始退出登录");
+      axios.get('/user/logout/'+ user.value.token).then((response) => {
+        const data = response.data;
+        if (data.success) {
+          loginModalVisible.value = false;
+          message.success("退出登录成功！");
+          store.commit("setUser", {});
         } else {
           message.error(data.message);
         }
@@ -102,6 +129,7 @@ export default defineComponent({
       showLoginModal,
       loginUser,
       login,
+      logout,
       user,
 
     }
@@ -114,5 +142,6 @@ export default defineComponent({
 .login-menu {
   float: right;
   color: white;
+  padding: 10px;
 }
 </style>
