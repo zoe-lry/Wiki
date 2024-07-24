@@ -149,4 +149,10 @@ public class DocService {
     }
   }
 
+  /**
+   * 更新ebook info
+   */
+  public void updateEbookInfo() {
+    docMapperCust.updateEbookInfo();
+  }
 }
