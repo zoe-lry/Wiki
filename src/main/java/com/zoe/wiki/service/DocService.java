@@ -9,6 +9,7 @@ import com.zoe.wiki.domain.Doc;
 import com.zoe.wiki.domain.DocExample;
 import com.zoe.wiki.mapper.ContentMapper;
 import com.zoe.wiki.mapper.DocMapper;
+import com.zoe.wiki.mapper.DocMapperCust;
 import com.zoe.wiki.req.DocQueryReq;
 import com.zoe.wiki.req.DocSaveReq;
 import com.zoe.wiki.resp.DocQueryResp;
@@ -28,6 +29,8 @@ public class DocService {
 
   @Resource  //把docMapper注入进来
   private DocMapper docMapper;
+  @Resource  //把docMapperCust注入进来
+  private DocMapperCust docMapperCust;
 
   @Resource  //把contentMapper注入进来
   private ContentMapper contentMapper;
@@ -86,6 +89,8 @@ public class DocService {
     if (isEmpty(req.getId())) {
       // 新增
       doc.setId(snowFlake.nextId());
+      doc.setViewCount(0);
+      doc.setVoteCount(0);
       docMapper.insert(doc);
 
       content.setId(doc.getId());
@@ -116,6 +121,7 @@ public class DocService {
 
   public String findContent(Long id) {
     Content content = contentMapper.selectByPrimaryKey(id);
+    docMapperCust.increaseViewCount(id);
     System.out.println(content);
     if (isEmpty(content)) {
       return "";
