@@ -4,9 +4,14 @@
 <!--  这里的地址是interface的地址： mapper.DocMapperCust-->
 <mapper namespace="com.zoe.wiki.mapper.DocMapperCust" >
 
-<!---->
+  <!--浏览数+1-->
   <select id="increaseViewCount" >
     update doc set view_count = view_count + 1 where id = #{id}
+  </select>
+
+  <!--点赞数+1-->
+  <select id="increaseVoteCount" >
+    update doc set vote_count = vote_count + 1 where id = #{id}
   </select>
 
 </mapper>
