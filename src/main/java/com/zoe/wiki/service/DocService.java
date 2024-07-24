@@ -7,6 +7,8 @@ import com.github.pagehelper.PageInfo;
 import com.zoe.wiki.domain.Content;
 import com.zoe.wiki.domain.Doc;
 import com.zoe.wiki.domain.DocExample;
+import com.zoe.wiki.exception.BusinessException;
+import com.zoe.wiki.exception.BusinessExceptionCode;
 import com.zoe.wiki.mapper.ContentMapper;
 import com.zoe.wiki.mapper.DocMapper;
 import com.zoe.wiki.mapper.DocMapperCust;
@@ -15,6 +17,8 @@ import com.zoe.wiki.req.DocSaveReq;
 import com.zoe.wiki.resp.DocQueryResp;
 import com.zoe.wiki.resp.PageResp;
 import com.zoe.wiki.util.CopyUtil;
+import com.zoe.wiki.util.RedisUtil;
+import com.zoe.wiki.util.RequestContext;
 import com.zoe.wiki.util.SnowFlake;
 import java.util.List;
 import javax.annotation.Resource;
@@ -31,11 +35,12 @@ public class DocService {
   private DocMapper docMapper;
   @Resource  //把docMapperCust注入进来
   private DocMapperCust docMapperCust;
-
   @Resource  //把contentMapper注入进来
   private ContentMapper contentMapper;
   @Resource  //把SnowFlake注入进来
   private SnowFlake snowFlake;
+  @Resource
+  public RedisUtil redisUtil;
 
   public List<DocQueryResp> all(Long ebookId) {
     DocExample docExample = new DocExample();
@@ -134,7 +139,14 @@ public class DocService {
    * 点赞
    */
   public void vote(Long id) {
-    docMapperCust.increaseVoteCount(id);
+//    docMapperCust.increaseVoteCount(id);
+    // 远程IP+doc.id作为key，24小时内不能重复
+    String ip = RequestContext.getRemoteAddr();
+    if (redisUtil.validateRepeat("DOC_VOTE_" + id + "_" + ip, 3600 * 24)) {
+      docMapperCust.increaseVoteCount(id);
+    } else {
+      throw new BusinessException(BusinessExceptionCode.VOTE_REPEAT);
+    }
   }
 
 }
