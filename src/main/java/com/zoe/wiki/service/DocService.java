@@ -24,6 +24,7 @@ import java.util.List;
 import javax.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
 
 @Service  //识别是Service
@@ -151,7 +152,8 @@ public class DocService {
     }
     // 推送消息
     Doc docDB = docMapper.selectByPrimaryKey(id);
-    wsService.sendInfo("【" + docDB.getName() + "】被点赞！");
+    String logId = MDC.get("LOG_ID");
+    wsService.sendInfo("【" + docDB.getName() + "】被点赞！", logId);
   }
   /**
    * 更新ebook info
