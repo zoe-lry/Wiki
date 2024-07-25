@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service  //识别是Service
 public class DocService {
@@ -91,6 +92,9 @@ public class DocService {
   /**
    * 保存
    */
+  @Transactional
+  // 添加事务注解，如果有两张表同时需要更新，让两张表要么都失败要么都成功，防止只有某张更新成功了，出现两张表不一致
+  // 该注解同样需要跨类调用，不能在同一个类里面调用，否则会不生效
   public void save(DocSaveReq req) {
     Doc doc = CopyUtil.copy(req, Doc.class);
     Content content = CopyUtil.copy(req, Content.class);
