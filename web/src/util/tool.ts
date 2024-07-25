@@ -39,7 +39,7 @@ export class Tool {
     const result = [];
     for (let i = 0; i < array.length; i++) {
       const c = array[i];
-      console.log(Number(c.parent), Number(parentId));
+      // console.log(Number(c.parent), Number(parentId));
       if (Number(c.parent) === Number(parentId)) {
         result.push(c);
 
@@ -51,5 +51,23 @@ export class Tool {
       }
     }
     return result;
+  }
+
+  /**
+   * 随机生成[len]长度的[radix]进制数
+   * @param len
+   * @param radix 默认62
+   * @returns {string}
+   */
+  public static uuid (len: number, radix = 62) {
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+    const uuid = [];
+    radix = radix || chars.length;
+
+    for (let i = 0; i < len; i++) {
+      uuid[i] = chars[0 | Math.random() * radix];
+    }
+
+    return uuid.join('');
   }
 }
