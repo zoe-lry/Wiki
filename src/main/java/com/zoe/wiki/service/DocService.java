@@ -20,7 +20,6 @@ import com.zoe.wiki.util.CopyUtil;
 import com.zoe.wiki.util.RedisUtil;
 import com.zoe.wiki.util.RequestContext;
 import com.zoe.wiki.util.SnowFlake;
-import com.zoe.wiki.websocket.WebSocketServer;
 import java.util.List;
 import javax.annotation.Resource;
 import org.slf4j.Logger;
@@ -43,7 +42,7 @@ public class DocService {
   @Resource
   public RedisUtil redisUtil;
   @Resource
-  public WebSocketServer webSocketServer;
+  public WsService wsService;
 
   public List<DocQueryResp> all(Long ebookId) {
     DocExample docExample = new DocExample();
@@ -152,9 +151,8 @@ public class DocService {
     }
     // 推送消息
     Doc docDB = docMapper.selectByPrimaryKey(id);
-    webSocketServer.sendInfo("【" + docDB.getName() + "】被点赞！" );
+    wsService.sendInfo("【" + docDB.getName() + "】被点赞！");
   }
-
   /**
    * 更新ebook info
    */
