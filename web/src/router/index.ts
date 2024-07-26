@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/admin/Category',
+    path: '/admin/category',
     name: 'AdminCategory',
     component: AdminCategory,
     meta: {
@@ -54,7 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     }
   },
   {
-    path: '/admin/Doc',
+    path: '/admin/doc',
     name: 'AdminDoc',
     component: AdminDoc,
     meta: {

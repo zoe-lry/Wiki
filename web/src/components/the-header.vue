@@ -34,16 +34,14 @@
         <router-link to="/about">About us</router-link>
       </a-menu-item>
       <a-menu-item key="/admin/user" :style="user.id? {}:{display:'none'}">
-        <router-link to="/admin/User">Users</router-link>
+        <router-link to="/admin/user">Users</router-link>
       </a-menu-item>
       <a-menu-item key="/admin/ebook" :style="user.id? {}:{display:'none'}">
         <router-link to="/admin/ebook">Ebooks</router-link>
       </a-menu-item>
-      <a-menu-item key="/admin/Category" :style="user.id? {}:{display:'none'}">
-        <router-link to="/admin/Category">Category</router-link>
+      <a-menu-item key="/admin/category" :style="user.id? {}:{display:'none'}">
+        <router-link to="/admin/category">Category</router-link>
       </a-menu-item>
-
-
     </a-menu>
 
     <a-modal
@@ -115,7 +113,6 @@ export default defineComponent({
       axios.get('/user/logout/'+ user.value.token).then((response) => {
         const data = response.data;
         if (data.success) {
-          loginModalVisible.value = false;
           message.success("退出登录成功！");
           store.commit("setUser", {});
         } else {
