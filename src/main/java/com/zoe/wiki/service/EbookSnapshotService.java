@@ -21,5 +21,10 @@ public class EbookSnapshotService {
     public List<StatisticResp> getStatistic() {
         return ebookSnapshotMapperCust.getStatistic();
     }
+    /**
+     * 获取30天
+     */public List<StatisticResp> get30Statistic() {
+        return ebookSnapshotMapperCust.get30Statistic();
+    }
 
 }
