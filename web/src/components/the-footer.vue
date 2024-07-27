@@ -1,5 +1,5 @@
 <template>
-  <a-layout-footer style="text-align: center;height: 100px;width: 100%;position: absolute;bottom: 0;left: 0">
+  <a-layout-footer class="footer">
     Zoe's <span v-show="user.id">. Welcome {{user.name}} </span>
   </a-layout-footer>
 </template>
@@ -68,3 +68,11 @@ import { notification } from 'ant-design-vue';
   })
 
 </script>
+
+<style scoped>
+.footer {
+  text-align: center;
+  height: 100px;
+  width: 100%;
+}
+</style>

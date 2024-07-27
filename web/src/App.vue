@@ -1,7 +1,7 @@
 <template>
-  <a-layout id="components-layout-demo-top-side-2">
+  <a-layout id="components-layout-demo-top-side-2" class="flex-container">
     <the-header></the-header>
-    <router-view/>
+      <router-view/>
     <the-footer></the-footer>
   </a-layout>
 </template>
@@ -19,3 +19,12 @@ export default defineComponent({
   },
 });
 </script>
+
+<style scoped>
+.flex-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+</style>
