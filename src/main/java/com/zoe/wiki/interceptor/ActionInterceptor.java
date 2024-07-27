@@ -2,6 +2,8 @@ package com.zoe.wiki.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.zoe.wiki.resp.CommonResp;
+import com.zoe.wiki.resp.UserLoginResp;
+import com.zoe.wiki.util.LoginUserContext;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,6 +29,11 @@ public class ActionInterceptor implements HandlerInterceptor {
             return true;
         }
 
+        UserLoginResp userLoginResp = LoginUserContext.getUser();
+        if ("admin".equals(userLoginResp.getLoginName())) {
+            // admin用户不拦截
+            return true;
+        }
         LOG.info("操作被拦截");
         response.setStatus(HttpStatus.OK.value());
         CommonResp commonResp = new CommonResp();
